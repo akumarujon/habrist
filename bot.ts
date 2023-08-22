@@ -5,10 +5,4 @@ import { launch } from "./serve.ts"
 const TOKEN = Deno.env.get('TOKEN')
 const bot = new Bot(TOKEN);
 
-bot.command("start",async (ctx) => {
-    await ctx.reply("A'zolik qo'shildi.")
-})
-
-await launch();
-
 export { bot }

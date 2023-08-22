@@ -9,7 +9,7 @@ async function addUser(id) {
 async function getUsers() {
 const users = [];
   for await (const res of kv.list({ prefix: ["user"] })) {
-    users.push(res.value);
+    users.push(res.value.id)
   }
 
   return users

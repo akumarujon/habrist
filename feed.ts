@@ -1,9 +1,9 @@
 import { parseFeed } from "https://deno.land/x/rss/mod.ts";
+import { kv } from "./kv.ts";
 
 const url = "https://habr.com/ru/rss/articles/?fl=ru"
 
 async function getFeed() {
-
   const response = await fetch(
     url,
   );

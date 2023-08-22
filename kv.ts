@@ -12,7 +12,8 @@ const users = [];
     users.push(res.value.id)
   }
 
-  return users
+  return [...new Set(users)]
 }
 
 export {getUsers, addUser}
+export {kv}

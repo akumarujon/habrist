@@ -3,6 +3,8 @@ import { addUser, getUsers } from "../kv.ts"
 import { getFeed } from "../feed.ts"
 
 bot.command("start",async (ctx) => {
+    const users = await getUsers()
+    if(!users.includes(ctx.message?.chat.id))
     addUser(ctx.message?.chat.id)
     await ctx.reply("A'zolik qo'shildi.")
 })

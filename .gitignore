@@ -1,0 +1,5 @@
+.env
+feed.txt
+feed.json
+.vscode
+test.ts

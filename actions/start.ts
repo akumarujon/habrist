@@ -15,7 +15,9 @@ setInterval( async() =>{
     users = [...new Set(users)]
     for(let id of users){
         let result = `${feed.title?.value}\n\n${feed.description?.value}<a href='${feed.id}'></a>`
-
+        result = result.replace("<p>", " ")
+        result = result.replace("</p>", " ")
+        console.log(result)
         bot.api.sendMessage(id, result, {parse_mode: "HTML"})
     }
-}, 60000);
+}, 1200000);

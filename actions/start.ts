@@ -9,7 +9,7 @@ bot.command("start",async (ctx) => {
     await ctx.reply("A'zolik qo'shildi.")
 })
 
-setInterval( async() =>{
+setInterval(async() =>{
     let users = await getUsers()
     let feed = await getFeed()
 

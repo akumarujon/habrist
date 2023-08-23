@@ -21,4 +21,4 @@ setInterval(async() =>{
 
         bot.api.sendMessage(id, result, {parse_mode: "HTML"})
     }
-}, 600000);
+}, 10000);

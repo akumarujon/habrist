@@ -1,19 +1,15 @@
-// Open the default database for the script.
-const kv = await Deno.openKv();
+const kv = await Deno.openKv()
 
-async function addUser(id) {
-    let length = await getUsers()
-    await kv.set(["user", ++length.length], {"id": id})
+await kv.set(["users"],[])
+
+async function append(user: string) {
+    const items = (await kv.get<string[]>(["users"])).value as string[];
+    items.push(user)
+    await kv.set(["users"], items)
 }
 
-async function getUsers() {
-const users = [];
-  for await (const res of kv.list({ prefix: ["user"] })) {
-    users.push(res.value.id)
-  }
-
-  return [...new Set(users)]
+async function getAll(): Promise<string[]> {
+    return (await kv.get<string[]>(["users"])).value as string[];
 }
 
-export {getUsers, addUser}
-export {kv}
+export { append, getAll }

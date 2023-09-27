@@ -1,7 +1,6 @@
 import { bot } from "./bot.ts"
 import { webhookCallback, serve } from "./deps.ts"
-import "https://deno.land/x/dotenv/load.ts";
-
+import "https://deno.land/std@0.201.0/dotenv/load.ts";
 
 const handle = webhookCallback(bot, "std/http");
 

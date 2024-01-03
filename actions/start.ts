@@ -11,22 +11,10 @@ bot.command("start",async (ctx) => {
 
 const kv = await Deno.openKv()
 
-setInterval(async() =>{
-    let last_feed = (await kv.get(["article"])).value;
-    let feed = await getFeed()
-    
-    if(last_feed?.id != feed.id){
-
-        for(let id of await getAll()){
-            let result:string = `${feed.title?.value}\n\n${feed.description?.value}<a href='${feed.id}'></a>`
-                    .replaceAll("<p>", " ")
-                    .replaceAll("</p>", " ")
-                    .replaceAll("<br>", "\n")
-
-            await bot.api.sendMessage(id, result, {parse_mode: "HTML"})
-        }
-    } else {
-        console.log("old")
+Deno.cron("send an article", "* * * * *", async() => {
+    const users = (await kv.get<string[]>(["users"])).value as string[]
+    for(const user of users) {
+        const feed = await getFeed()
+        await bot.api.sendMessage(user, feed)
     }
-    await kv.set(["article"], feed)
-}, 5000 );
+})

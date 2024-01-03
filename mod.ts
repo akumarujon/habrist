@@ -1,5 +1,5 @@
 import { launch } from "./serve.ts";
-import "./actions/mod.ts"
+import "./actions/mod.ts";
 
-console.log("Working!")
+console.log("Working!");
 await launch();

@@ -1,6 +1,7 @@
 import { bot } from "../bot.ts";
-import { append, getAll } from "../kv.ts";
+import { append, getAll, remove } from "../kv.ts";
 import { getFeed } from "../feed.ts";
+import { GrammyError } from "../deps.ts";
 
 bot.command("start", async (ctx) => {
   const users = await getAll();
@@ -27,18 +28,28 @@ Deno.cron("send an article", "* * * * *", async () => {
     await kv.set(["last"], feed.id);
 
     const users = (await kv.get<string[]>(["users"])).value as string[];
-    console.log("Users:", users)
-    console.log("Last article: ",last)
-    console.log("Feed: ", feed.id)
-    
+    console.log("Users:", users);
+    console.log("Last article: ", last);
+    console.log("Feed: ", feed.id);
+
     for (const user of users) {
       const response = `${feed.title?.value}\n\n${
         feed.description?.value?.replace(/<\/?p>/g, "").replace("<br>", "\n")
       }\n\n${feed.id}`;
 
-      await bot.api.sendMessage(user, response, {
-        parse_mode: "HTML",
-      });
+      try {
+        await bot.api.sendMessage(user, response, {
+          parse_mode: "HTML",
+        });
+      } catch (err) {
+        if (err instanceof GrammyError) {
+          console.log(err.description);
+          await remove(user);
+          console.log("Removed");
+        } else {
+          console.log("Other error:", err);
+        }
+      }
     }
   }
 });

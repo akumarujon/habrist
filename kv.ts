@@ -16,4 +16,8 @@ async function getAll(): Promise<string[]> {
   return (await kv.get<string[]>(["users"])).value as string[];
 }
 
-export { append, getAll };
+async function remove(id: string | number): Promise<void> {
+  kv.set(["users"], (await getAll()).filter((item) => item !== id));
+}
+
+export { append, getAll, remove };

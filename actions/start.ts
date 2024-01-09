@@ -24,13 +24,15 @@ Deno.cron("send an article", "* * * * *", async () => {
   const feed = await getFeed();
   const last = (await kv.get<string>(["last"])).value;
 
-  if (feed.id != last) {
-    await kv.set(["last"], feed.id);
+  const feed_id = feed.id.match(/\d+/g)?.[0];
+
+  if (feed_id != last) {
+    await kv.set(["last"], feed_id);
 
     const users = (await kv.get<string[]>(["users"])).value as string[];
     console.log("Users:", users);
     console.log("Last article: ", last);
-    console.log("Feed: ", feed.id);
+    console.log("Feed: ", feed_id);
 
     for (const user of users) {
       const response = `${feed.title?.value}\n\n${
@@ -42,6 +44,7 @@ Deno.cron("send an article", "* * * * *", async () => {
           parse_mode: "HTML",
         });
       } catch (err) {
+        console.log(err);
         if (err instanceof GrammyError) {
           console.log(err.description);
           await remove(user);

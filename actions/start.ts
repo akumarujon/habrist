@@ -34,11 +34,12 @@ Deno.cron("send an article", "* * * * *", async () => {
     console.log("Last article: ", last);
     console.log("Feed: ", feed_id);
 
-    for (const user of users) {
-      const response = `${feed.title?.value}\n\n${
-        feed.description?.value?.replace(/<\/?p>/g, "").replace("<br>", "\n")
-      }\n\n${feed.id}`;
+    const response = `${feed.title?.value}\n\n${
+      feed.description?.value?.replace(/<\/?p>/g, "").replace("<br>", "\n")
+        .replace(/<img\s+src="[^"]*"\s*\/?>/g, "")
+    }\n\n${feed.id}`;
 
+    for (const user of users) {
       try {
         await bot.api.sendMessage(user, response, {
           parse_mode: "HTML",
